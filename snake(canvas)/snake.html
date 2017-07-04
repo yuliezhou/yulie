@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .box{height:700px;width: 600px;margin: 0 auto;}
+        .btn{margin-left: 160px;}
+    </style>
+</head>
+<body>
+<div class="box">
+    <canvas id="cvs" width="600px" height="600px"></canvas>
+    <div class="btn">
+        <button id="begin" style="padding:5px 8px; margin:10px 0  0 20px;" >开始</button>
+        <button id="res" style="padding:5px 8px; margin:10px 0  0 20px;">减速</button>
+        <button id="add" style="padding:5px 8px; margin:10px 0  0 20px;">加速</button>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    var timer;
+    var cvs=document.getElementById('cvs');
+    var ctx=cvs.getContext("2d");
+    var boxNum=30;
+    var size=20;
+    var num=300;
+    var arr=[
+        {x:10,y:10},
+        {x:10,y:11},
+        {x:10,y:12}
+    ];
+    var foodx=[];
+    var foody=[];
+    var direction=1;//方向
+    //画布
+    ctx.strokeStyle='gray';
+    function drawsc(){
+        for(var i=0;i<boxNum;i++){
+            for(var j=0;j<boxNum;j++){
+                ctx.strokeRect(i*size,j*size,size,size)
+            }
+        }
+    }
+    drawsc();
+    //画蛇
+    function drawsnake(){
+        ctx.fillStyle='#ccc';
+        for(var i=0;i<arr.length;i++){
+            ctx.fillRect(arr[i].x*size,arr[i].y*size,size,size)
+        }
+    }
+    drawsnake();
+    //画食物
+    function drawfood(){
+        ctx.fillStyle='#0093ff';
+        for(var i=0;i<4;i++){
+            var m=parseInt(Math.random()*boxNum);
+            var n=parseInt(Math.random()*boxNum);
+            foodx.push(m);
+            foody.push(n);
+            ctx.fillRect(foodx[i]*size,foody[i]*size,size,size);
+        }
+    }
+    drawfood();
+    //加食物
+    function addfood1(){
+        ctx.fillStyle='#0093ff';
+        for(var i=0;i<4;i++){
+            ctx.fillRect(foodx[i]*size,foody[i]*size,size,size);
+        }
+
+    }
+    function move(){
+        for(var i=arr.length-1;i>0;i--){
+            arr[i].x=arr[i-1].x;
+            arr[i].y=arr[i-1].y
+        }
+        switch(direction){
+            case 0: arr[0].x--; break;
+            case 1: arr[0].y--; break;
+            case 2: arr[0].x++; break;
+            case 3: arr[0].y++; break;
+        }
+        if(arr[0].x<0){
+            arr[0].x=29
+        }else if(arr[0].x>29){
+            arr[0].x=0
+        }else if(arr[0].y>29){
+            arr[0].y=0
+        }else if(arr[0].y<0){
+            arr[0].y=29
+        }
+        for(var i=0;i<4;i++){
+            if(arr[0].x==foodx[i]&&arr[0].y==foody[i]){
+                foodx.splice(i,1);
+                foody.splice(i,1);
+                var p=parseInt(Math.random()*boxNum);
+                var q=parseInt(Math.random()*boxNum);
+                foodx.push(p);
+                foody.push(q);
+                arr.push({x:foodx[i],y:foody[i]});
+            }
+        }
+        over()
+    }
+    function init(){
+        ctx.clearRect(0,0,cvs.width,cvs.height);
+        drawsc();
+        move();
+        drawsnake();
+        addfood1();
+    }
+    init();
+    //38上 40下 37左 39右
+    document.onkeydown=function(e){
+        switch(e.keyCode){
+            case 37: if (direction != 2) direction=0; break;
+            case 38: if (direction != 3) direction=1; break;
+            case 39: if (direction != 0) direction=2; break;
+            case 40: if (direction != 1) direction=3; break;
+        }
+    };
+    function over(){
+        for(var i=1;i<arr.length;i++){
+            if(arr[0].x==arr[i].x&&arr[0].y==arr[i].y){
+                clearInterval(timer);
+                alert("游戏结束");
+                arr=[
+                    {x:10,y:10},
+                    {x:10,y:11},
+                    {x:10,y:12}
+                ];
+                drawsnake();
+            }
+        }
+    }
+    document.getElementById('begin').onclick=function(){
+        clearInterval(timer);
+        timer=setInterval(init,num);
+        //减速
+        document.getElementById('res').onclick=function(){
+            num=num+50;
+            clearInterval(timer);
+            timer=setInterval(init,num);
+        };
+        //加速
+        document.getElementById('add').onclick=function(){
+            num=num-50;
+            clearInterval(timer);
+            if(num<50){
+                num=50
+            }
+            timer=setInterval(init,num);
+        };
+
+    };
+
+
+
+
+</script>

@@ -1,0 +1,11 @@
+.nav-color{background: #2d3e50;padding: 15px 0;margin-bottom: 0px;border:none;}
+.nav-head li a:hover{background:red;}
+.v{background: #6f5499;}
+.midimg{text-align: center;padding-top: 120px;}
+.echoh2{color: #fff;font-size: 50px;font-weight: bolder;}
+.echohspan{border-bottom: 5px solid #fff;width: 250px;height: 40px;display: block;margin: 0 auto;margin-bottom:30px; }
+.simple{font-size: 24px;color: #fff;}
+.fea{margin-top: 75px;padding: 0 10px;text-align: center;font-weight: bolder;}
+.feaspan{height: 20px;width: 200px;margin: 0 auto;border-bottom: 5px solid #000;display: block;margin-bottom: 20px;}
+.banner{background: #6f5499;padding: 100px 0 20px;}
+.control-height{height: 45px;line-height: 45px;}
